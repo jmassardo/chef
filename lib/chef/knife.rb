@@ -209,7 +209,7 @@ class Chef
       # from early in the setup process.
       if ENV["KNIFE_DEBUG"]
         Chef::Log.init($stderr)
-        Chef::Log.level(:debug)
+        Chef::Log.level(:trace)
       end
 
       subcommand_class = subcommand_class_from(args)
@@ -364,17 +364,16 @@ class Chef
     # into log level.
     def apply_computed_config
       Chef::Config[:color] = config[:color]
-
       case Chef::Config[:verbosity]
       when 0, nil
         Chef::Config[:log_level] = :warn
       when 1
         Chef::Config[:log_level] = :info
       else
-        Chef::Config[:log_level] = :debug
+        Chef::Config[:log_level] = :trace
       end
 
-      Chef::Config[:log_level] = :debug if ENV["KNIFE_DEBUG"]
+      Chef::Config[:log_level] = :trace if ENV["KNIFE_DEBUG"]
 
       Chef::Config[:node_name]         = config[:node_name]       if config[:node_name]
       Chef::Config[:client_key]        = config[:client_key]      if config[:client_key]
