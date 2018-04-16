@@ -28,18 +28,48 @@ class Chef
       description "Use the ssh_known_hosts_entry resource to append an entry for the specified host in /etc/ssh/ssh_known_hosts or a user's known hosts file if specified."
       introduced "15.0"
 
-      property :host, String, name_property: true
-      property :key, String
-      property :key_type, String, default: "rsa"
-      property :port, Integer, default: 22
-      property :timeout, Integer, default: 30
-      property :mode, String, default: "0644"
-      property :owner, String, default: "root"
-      property :group, String, default: "root"
-      property :hash_entries, [true, false], default: false
-      property :file_location, String, default: "/etc/ssh/ssh_known_hosts"
+      property :host, String,
+               description: "",
+               name_property: true
+
+      property :key, String,
+               description: ""
+
+      property :key_type, String,
+               description: "",
+               default: "rsa"
+
+      property :port, Integer,
+               description: "",
+               default: 22
+
+      property :timeout, Integer,
+               description: "",
+               default: 30
+
+      property :mode, String,
+               description: "",
+               default: "0644"
+
+      property :owner, String,
+               description: "",
+               default: "root"
+
+      property :group, String,
+               description: "",
+               default: "root"
+
+      property :hash_entries, [TrueClass, FalseClass],
+               description: "",
+               default: false
+
+      property :file_location, String,
+               description: "",
+               default: "/etc/ssh/ssh_known_hosts"
 
       action :create do
+        description ""
+
         key =
           if new_resource.key
             hoststr = (new_resource.port != 22) ? "[#{new_resource.host}]:#{new_resource.port}" : new_resource.host
@@ -81,6 +111,8 @@ class Chef
 
       # all this does is send an immediate run_action(:create) to the template resource
       action :flush do
+        description ""
+
         with_run_context :root do
           # if you haven't ever called ssh_known_hosts_entry before you're definitely doing it wrong so we blow up hard.
           find_resource!(:template, "update ssh known hosts file #{new_resource.file_location}").run_action(:create)
