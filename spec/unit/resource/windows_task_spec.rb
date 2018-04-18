@@ -55,7 +55,15 @@ describe Chef::Resource::WindowsTask, :windows_only do
 
   context "when frequency is not provided" do
     it "raises ArgumentError to provide frequency" do
+      ::Chef::VERSION = "14.1.0"
       expect { resource.after_created }.to raise_error(ArgumentError, "Frequency needs to be provided. Valid frequencies are :minute, :hourly, :daily, :weekly, :monthly, :once, :on_logon, :onstart, :on_idle, :none." )
+    end
+
+    it "sets frequency to :hourly if chef version < 14.1 and not to raise any ArgumentError error" do
+      ::Chef::VERSION = "13.8.5"
+      expect { resource.after_created }.to_not raise_error
+      resource.after_created
+      expect(resource.frequency).to eql(:hourly)
     end
   end
 

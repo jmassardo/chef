@@ -80,9 +80,9 @@ class Chef
           execution_time_limit(sec_to_min(execution_time_limit))
         end
 
-        # Removed the default value :hourly for frequency in Chef 14 following code added for backward compatibility
+        # Removed the default value :hourly for frequency in Chef 14.1 following code added for backward compatibility
         chef_version = ::Chef::VERSION.split(".")
-        if chef_version[0].to_i > 13 || (chef_version[0].to_i >= 0)
+        if chef_version[0].to_i > 14 || (chef_version[0].to_i == 14 && chef_version[1].to_i > 0)
           validate_frequency(frequency) if action.include?(:create) || action.include?(:change)
         else
           frequency(:hourly) if frequency.nil?
