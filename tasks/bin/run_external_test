@@ -11,6 +11,8 @@ include Chef::Mixin::ShellOut
 github_repo = ARGV.shift
 git_thing = ARGV.shift
 
+ENV['GEMFILE_MOD'] = "gem 'chef', git: 'https://github.com/chef/chef.git'"
+
 Dir.mktmpdir("chef-external-test") do |dir|
   git_url = "https://github.com/#{github_repo}"
   Dir.rmdir dir
