@@ -88,10 +88,10 @@ matrix:
     script: bundle exec tasks/bin/run_external_test $TEST_GEM master rake
     rvm: 2.5.1
   - env:
-      PEDANT_OPTS: --skip-oc_id
-      TEST_GEM: chef/chef-zero
-      CHEF_FS: "true"
-      GEMFILE_MOD: "gem 'chef', git: 'https://github.com/chef/chef.git'"
+      - PEDANT_OPTS=--skip-oc_id
+      - TEST_GEM=chef/chef-zero
+      - CHEF_FS=true
+      - "GEMFILE_MOD=\"gem 'chef', git: 'https://github.com/chef/chef.git'\""
     script: bundle exec tasks/bin/run_external_test $TEST_GEM master rake pedant
     rvm: 2.5.1
   - env:
