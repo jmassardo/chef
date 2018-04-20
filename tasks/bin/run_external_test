@@ -11,7 +11,9 @@ include Chef::Mixin::ShellOut
 github_repo = ARGV.shift
 git_thing = ARGV.shift
 
-ENV['GEMFILE_MOD'] = "gem 'chef', git: 'https://github.com/chef/chef.git'"
+build_dir = File.expand_path(ENV["TRAVIS_BUILD_DIR"] || Dir.pwd)
+
+env = { 'GEMFILE_MOD' => "gem 'chef', path: '#{build_dir}'" }
 
 Dir.mktmpdir("chef-external-test") do |dir|
   git_url = "https://github.com/#{github_repo}"
@@ -20,8 +22,8 @@ Dir.mktmpdir("chef-external-test") do |dir|
   Dir.chdir(dir) do
     shell_out!("git checkout #{git_thing}", live_stream: STDOUT)
     Bundler.with_clean_env do
-      shell_out!("bundle install", live_stream: STDOUT)
-      shell_out!("bundle exec #{ARGV.join(" ")}", live_stream: STDOUT)
+      shell_out!("bundle install", live_stream: STDOUT, env: env)
+      shell_out!("bundle exec #{ARGV.join(" ")}", live_stream: STDOUT, env: env)
     end
   end
 end
