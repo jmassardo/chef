@@ -122,14 +122,11 @@ class Chef
             end
 
             # if start_day and start_time is not set by user current date and time will be set while updating any property
-            set_start_day_and_time unless [:none, :onstart].include? new_resource.frequency
+            set_start_day_and_time unless new_resource.frequency == :none
             update_task(current_resource.task)
           else
             basic_validation
-            if new_resource.frequency != :onstart
-              set_start_day_and_time
-            end
-
+            set_start_day_and_time
             task = TaskScheduler.new
             if new_resource.frequency == :none
               task.new_work_item(new_resource.task_name, {})
